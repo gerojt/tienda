@@ -303,4 +303,5 @@ def init_db():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    # Debug mode disabled for security - enable only in development
+    app.run(debug=False)
