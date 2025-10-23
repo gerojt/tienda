@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Venta #{{ sale.id }} - Tienda{% endblock %}
+
+{% block content %}
+<h1>Detalle de Venta #{{ sale.id }}</h1>
+
+<div class="card">
+    <h2>Información General</h2>
+    <p><strong>Cliente:</strong> {{ sale.customer.name }}</p>
+    <p><strong>Email:</strong> {{ sale.customer.email }}</p>
+    <p><strong>Estado:</strong> {{ sale.status }}</p>
+    <p><strong>Fecha:</strong> {{ sale.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+</div>
+
+<div class="card">
+    <h2>Productos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio Unitario</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in sale.items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>${{ "%.2f"|format(item.price) }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ "%.2f"|format(item.price * item.quantity) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr style="font-weight: bold; font-size: 18px;">
+                <td colspan="3" style="text-align: right;">Total:</td>
+                <td>${{ "%.2f"|format(sale.total) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div style="margin-top: 20px;">
+    <a href="{{ url_for('sales') }}" class="btn">Volver a Ventas</a>
+</div>
+{% endblock %}

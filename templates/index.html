@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="text-align: center; margin-top: 50px;">
+    <h1>Sistema de Gestión de Ventas Online</h1>
+    <p style="font-size: 18px; margin: 20px 0; color: #666;">
+        Bienvenido al sistema de gestión de ventas. Administra tus productos, clientes y ventas de manera eficiente.
+    </p>
+    <div style="margin-top: 30px;">
+        <a href="{{ url_for('login') }}" class="btn btn-success" style="font-size: 16px; padding: 12px 30px;">
+            Iniciar Sesión
+        </a>
+    </div>
+</div>
+
+<div class="grid" style="margin-top: 50px;">
+    <div class="stat-card">
+        <h3>📦 Productos</h3>
+        <p style="margin-top: 10px; color: #666;">Gestiona tu inventario de productos</p>
+    </div>
+    <div class="stat-card">
+        <h3>👥 Clientes</h3>
+        <p style="margin-top: 10px; color: #666;">Administra tu base de clientes</p>
+    </div>
+    <div class="stat-card">
+        <h3>💰 Ventas</h3>
+        <p style="margin-top: 10px; color: #666;">Registra y controla tus ventas</p>
+    </div>
+    <div class="stat-card">
+        <h3>📊 Reportes</h3>
+        <p style="margin-top: 10px; color: #666;">Analiza el rendimiento de tu negocio</p>
+    </div>
+</div>
+{% endblock %}
