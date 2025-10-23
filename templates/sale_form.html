@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Nueva Venta - Tienda{% endblock %}
+
+{% block content %}
+<h1>Nueva Venta</h1>
+
+<div class="card">
+    <form method="POST" id="saleForm">
+        <div class="form-group">
+            <label for="customer_id">Cliente:</label>
+            <select id="customer_id" name="customer_id" required>
+                <option value="">Seleccionar cliente...</option>
+                {% for customer in customers %}
+                <option value="{{ customer.id }}">{{ customer.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <h3>Productos</h3>
+        <div id="products-container">
+            <div class="product-item" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-end;">
+                <div class="form-group" style="flex: 2; margin-bottom: 0;">
+                    <label>Producto:</label>
+                    <select name="product_id[]" class="product-select" required>
+                        <option value="">Seleccionar producto...</option>
+                        {% for product in products %}
+                        <option value="{{ product.id }}" data-price="{{ product.price }}" data-stock="{{ product.stock }}">
+                            {{ product.name }} - Stock: {{ product.stock }} - ${{ "%.2f"|format(product.price) }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                    <label>Cantidad:</label>
+                    <input type="number" name="quantity[]" class="quantity-input" min="1" required>
+                </div>
+                <button type="button" class="btn btn-danger btn-small" onclick="removeProduct(this)">Eliminar</button>
+            </div>
+        </div>
+        
+        <button type="button" class="btn" onclick="addProduct()">+ Agregar Producto</button>
+        
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+            <button type="submit" class="btn btn-success">Registrar Venta</button>
+            <a href="{{ url_for('sales') }}" class="btn">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<script>
+function addProduct() {
+    const container = document.getElementById('products-container');
+    const firstItem = container.querySelector('.product-item');
+    const newItem = firstItem.cloneNode(true);
+    
+    // Clear values
+    newItem.querySelector('.product-select').value = '';
+    newItem.querySelector('.quantity-input').value = '';
+    
+    container.appendChild(newItem);
+}
+
+function removeProduct(btn) {
+    const container = document.getElementById('products-container');
+    if (container.querySelectorAll('.product-item').length > 1) {
+        btn.closest('.product-item').remove();
+    } else {
+        alert('Debe haber al menos un producto en la venta');
+    }
+}
+
+// Validate stock
+document.getElementById('saleForm').addEventListener('submit', function(e) {
+    const productItems = document.querySelectorAll('.product-item');
+    let valid = true;
+    
+    productItems.forEach(item => {
+        const select = item.querySelector('.product-select');
+        const quantity = parseInt(item.querySelector('.quantity-input').value);
+        const selectedOption = select.options[select.selectedIndex];
+        
+        if (selectedOption.value) {
+            const stock = parseInt(selectedOption.dataset.stock);
+            if (quantity > stock) {
+                alert(`Stock insuficiente para ${selectedOption.text}`);
+                valid = false;
+            }
+        }
+    });
+    
+    if (!valid) {
+        e.preventDefault();
+    }
+});
+</script>
+{% endblock %}

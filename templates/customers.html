@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Clientes - Tienda{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1>Clientes</h1>
+    <a href="{{ url_for('add_customer') }}" class="btn btn-success">+ Agregar Cliente</a>
+</div>
+
+<div class="card">
+    {% if customers %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.phone }}</td>
+                <td>{{ customer.address[:30] }}...</td>
+                <td>
+                    <div class="actions">
+                        <a href="{{ url_for('edit_customer', id=customer.id) }}" class="btn btn-warning btn-small">Editar</a>
+                        <a href="{{ url_for('delete_customer', id=customer.id) }}" 
+                           class="btn btn-danger btn-small"
+                           onclick="return confirm('¿Estás seguro de eliminar este cliente?')">
+                            Eliminar
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: #666;">No hay clientes registrados. <a href="{{ url_for('add_customer') }}">Agregar el primero</a></p>
+    {% endif %}
+</div>
+{% endblock %}
